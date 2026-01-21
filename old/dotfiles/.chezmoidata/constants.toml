@@ -1,3 +1,0 @@
-[directories]
-    ssh_keys_dir = "${HOME}/.ssh"
-    user_bin_dir = "${HOME}/bin"
