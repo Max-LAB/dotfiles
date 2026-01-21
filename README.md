@@ -1,31 +1,29 @@
-# README #
+# README
 
-TEST
+# How to use chezmoi with devpods
 
-This README would normally document whatever steps are necessary to get your application up and running.
+```
+devpod up . --recreate --dotfiles https://github.com/Max-LAB/dotfiles.git
+```
 
-### What is this repository for? ###
+```
+devpod ssh .
+```
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+# How to install chezmoi
 
-### How do I get set up? ###
+```
+sudo apt install chezmoi
+snap install chezmoi --classic
+```
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## How to delete chezmoi state
 
-### Contribution guidelines ###
+```
+chezmoi state reset
+```
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+```sh
+chezmoi status 
+# Gives a quick summary of what files would change if you ran chezmoi apply.
+```

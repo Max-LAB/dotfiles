@@ -1,0 +1,24 @@
+# how to chose which OS and which PC I am installing on? 
+# OS: {{- if eq .chezmoi.os "linux" -}}
+# PC: .chezmoi.toml.tmpl
+
+packages:
+    apt:
+      to_remove:
+        - btop
+        - htop
+      common:
+        packages:
+          - bat                  # cat with syntax highlighting and Git integration
+          - curl
+          - git
+          - git-extras
+          - jq
+          - nano
+          - net-tools
+          - fzf
+          - unzip
+          - wget
+          - zsh
+      dev_computer:
+        packages: []

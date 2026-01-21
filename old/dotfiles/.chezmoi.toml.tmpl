@@ -1,0 +1,28 @@
+{{- $dev_computer := promptBoolOnce . "dev_computer" "Do you do development on this computer? (true/false)" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+
+[data]
+    dev_computer      = {{ $dev_computer }}
+    email             = {{ $email | quote }}
+    xdgCacheDir       = "{{ .chezmoi.homeDir }}/.cache"
+    xdgConfigDir      = "{{ .chezmoi.homeDir }}/.config"
+    xdgDataDir        = "{{ .chezmoi.homeDir }}/.local/share"
+    xdgStateDir       = "{{ .chezmoi.homeDir }}/.local/state"
+
+[diff]
+    {{ if lookPath "delta" -}}command = "delta"
+    {{ end -}}
+    exclude = ["scripts"]
+
+{{ if lookPath "code" -}}
+[edit]
+    args    = ["-r", "--wait"]
+    command = "code"
+
+[merge]
+    command = "bash"
+    args = [
+        "-c",
+        "cp '{{ "{{" }} .Target {{ "}}" }}' '{{ "{{" }} .Target {{ "}}" }}.base' && code --new-window --wait --merge '{{ "{{" }} .Destination {{ "}}" }}' '{{ "{{" }} .Target {{ "}}" }}' '{{ "{{" }} .Target {{ "}}" }}.base' '{{ "{{" }} .Source {{ "}}" }}'",
+    ]
+{{ end -}}

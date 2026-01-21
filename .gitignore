@@ -48,3 +48,15 @@ Thumbs.db
 *.mov
 *.wmv
 
+data.json
+.venv
+.DS_Store
+reports
+.reports
+.cache/
+__pycache__
+GEMINI.md
+.github/copilot-instructions.md
+.github/instructions/
+.cursor/
+.cache/
