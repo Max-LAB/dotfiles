@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+K9S_VERSION="v0.50.18"
+ARCH="$(uname -m)"
+
+case "$ARCH" in
+  x86_64) ARCH="amd64" ;;
+  aarch64) ARCH="arm64" ;;
+  armv7l) ARCH="arm" ;;
+  *)
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+    ;;
+esac
+
+OS="Linux"
+INSTALL_PATH="/usr/local/bin/k9s"
+TMP_DIR="$(mktemp -d)"
+
+cleanup() {
+  rm -rf "$TMP_DIR"
+}
+trap cleanup EXIT
+
+INSTALLED_VERSION="$(k9s version -s 2>/dev/null | awk '{print $2}')"
+
+if [[ "$INSTALLED_VERSION" == "$K9S_VERSION" ]]; then
+  echo "==> k9s ${K9S_VERSION} already installed"
+  exit 0
+fi
+
+echo "==> Installing k9s ${K9S_VERSION} for ${OS}/${ARCH}"
+
+TARBALL="k9s_${OS}_${ARCH}.tar.gz"
+URL="https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/${TARBALL}"
+
+curl -fsSL "$URL" -o "$TMP_DIR/k9s.tar.gz"
+tar -xzf "$TMP_DIR/k9s.tar.gz" -C "$TMP_DIR"
+
+sudo install -m 0755 "$TMP_DIR/k9s" "$INSTALL_PATH"
+
+echo "==> k9s installed successfully"
