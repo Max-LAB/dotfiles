@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+{{ template "shared_script_utils.bash" . }}
+
+
+header "Checking for packages to remove"
+
+did_remove_package=false
+
+{{- if eq .chezmoi.os "linux" -}}
+    {{ range $package := .packages.apt.to_remove }}
+    if apt search "{{ $package }}" | grep "installed" &> /dev/null; then
+        did_remove_package=true
+        sudo apt remove -y "{{ $package }}"
+    fi
+    {{ end }}
+{{ end }}
+
+if ${did_remove_package}; then
+    success "Removed packages"
+fi
+
+_safeExit_

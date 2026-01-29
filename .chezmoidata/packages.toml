@@ -1,0 +1,16 @@
+[packages.apt]
+    to_remove = ["btop", "htop", "dnsutils"]
+    [packages.apt.common]
+        packages = [
+            "bat",                 # cat with syntax highlighting and Git integration
+            "curl",
+            "fzf",
+            "git",
+            "git-extras",
+            "gnupg",
+            "gpg",
+            "jq",
+            "nano",
+            "unzip",
+            "wget",
+        ]

@@ -1,55 +1,31 @@
-{{ if eq .osid "linux-debian" "linux-raspbian" "linux-ubuntu" -}}
+{{- if eq .chezmoi.os "linux" -}}
 
-{{ $packages := list
-     "bat"
-     "curl"
-     "fzf"
-     "git"
-     "jq" -}}
-{{ $snaps := list -}}
-{{ $classicSnaps := list -}}
+#!/usr/bin/env bash
 
-{{ if eq .osid "linux-ubuntu" -}}
-{{   $packages = mustAppend $packages "btop" -}}
-{{ end -}}
+{{ template "shared_script_utils.bash" . }}
 
-{{ if not .headless -}}
-{{   $packages = mustAppend $packages "xclip" -}}
-{{   $classicSnaps = mustAppend $classicSnaps "code" -}}
-{{ end -}}
+packages=(
+    {{ range $package := .packages.apt.common.packages }}
+    "{{ $package }}"
+    {{ end }}
+)
 
-{{ if .personal -}}
-{{   $packages = mustAppend $packages "musl-tools" -}}
-{{   $classicSnaps = concat $classicSnaps (list "goreleaser" "snapcraft") -}}
-{{ end -}}
+header "Installing packages with apt"
+sudo apt-get update
 
-{{ if and (eq .osid "linux-ubuntu") (not .ephemeral) -}}
-{{   $packages = concat $packages (list "gdal-bin" "libgeos-dev" "libproj-dev" "postgis" "postgresql") -}}
-{{ end -}}
+for package in "${packages[@]}"; do
+    if sudo dpkg-query -l | awk {'print $2'} | grep -E "^${package}$" &>/dev/null; then
+        info "Package ${package} is already installed"
+        continue
+    fi
+    if apt-cache search --names-only "^${package}$" | grep -q "^${package} "; then
+        sudo apt-get install -y --no-upgrade "${package}"
+    else
+        warning "Package ${package} is not available in apt"
+    fi
+done
 
-{{ if and (eq .osid "linux-ubuntu") (not .headless) (not .ephemeral) -}}
-{{   $packages = concat $packages (list "qgis") -}}
-{{ end -}}
+success "Apt packages installed"
+_safeExit_
 
-{{ $sudo := "sudo " -}}
-{{ if eq .chezmoi.username "root" -}}
-{{   $sudo = "" -}}
-{{ end -}}
-
-#!/bin/bash
-
-set -eufo pipefail
-
-{{ $sudo }}apt-get update
-{{ $sudo }}apt-get install -y {{ $packages | join " " }}
-
-{{ if lookPath "snap" }}
-{{   range $snaps }}
-( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install {{ . }}
-{{   end }}
-{{   range $classicSnaps }}
-( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install --classic {{ . }}
-{{   end }}
-{{ end }}
-
-{{ end -}}
+{{- end }}
