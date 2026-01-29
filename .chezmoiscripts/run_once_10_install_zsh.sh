@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
-
+echo "$OSTYPE"
 if ! command -v zsh >/dev/null 2>&1; then
-  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  if [[ "$OSTYPE" == "linux-debian"* ]] || [[ "$OSTYPE" == "linux-raspbian"* ]] || [[ "$OSTYPE" == "linux-ubuntu"* ]]; then
     sudo apt update
     sudo apt install -y zsh
   elif [[ "$OSTYPE" == "darwin"* ]]; then
