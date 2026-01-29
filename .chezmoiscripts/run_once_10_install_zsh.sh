@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-echo "$OSTYPE"
+
 if ! command -v zsh >/dev/null 2>&1; then
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     sudo apt update
