@@ -14,6 +14,6 @@ ZSH_PATH="$(command -v zsh)"
 
 if [[ "$SHELL" != "$ZSH_PATH" ]]; then
   echo "==> Changing default shell to zsh"
-  chsh -s "$ZSH_PATH"
+  echo "==> chsh -s "$ZSH_PATH""
   echo "==> Logout and login required"
 fi
