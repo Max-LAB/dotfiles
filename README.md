@@ -27,3 +27,7 @@ chezmoi state reset
 chezmoi status 
 # Gives a quick summary of what files would change if you ran chezmoi apply.
 ```
+
+```sh
+hezmoi init --apply Max-LAB
+```
