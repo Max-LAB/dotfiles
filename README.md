@@ -29,5 +29,5 @@ chezmoi status
 ```
 
 ```sh
-hezmoi init --apply Max-LAB
+hezmoi init --apply Max-LAB´
 ```
