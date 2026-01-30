@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DEST="$HOME/.local/share/fonts"
+TMPDIR="$(mktemp -d)"
+
+FONTS=(
+  "JetBrainsMono"
+  "FiraCode"
+)
+
+echo "→ Installing Nerd Fonts required for tmux…"
+
+mkdir -p "$DEST"
+cd "$TMPDIR"
+
+for FONT in "${FONTS[@]}"; do
+  echo "→ Installing ${FONT} Nerd Font Mono"
+  curl -fsSLO "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${FONT}.zip"
+  unzip -q "${FONT}.zip" -d "$DEST"
+done
+
+echo "→ Rebuilding font cache"
+fc-cache -fvr
+
+echo "→ Installing fontconfig override (monospace → Nerd Font Mono)"
+
+mkdir -p "$HOME/.config/fontconfig/conf.d"
+
+cat > "$HOME/.config/fontconfig/conf.d/60-monospace-nerdfont.conf" <<'EOF'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <alias>
+    <family>monospace</family>
+    <prefer>
+      <family>JetBrainsMono Nerd Font Mono</family>
+      <family>FiraCode Nerd Font Mono</family>
+    </prefer>
+  </alias>
+</fontconfig>
+EOF
+
+echo "→ Rebuilding font cache again (after fontconfig change)"
+fc-cache -fvr
+
+echo "✓ Nerd Fonts for tmux installed successfully"

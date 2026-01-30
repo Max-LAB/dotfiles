@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMUX_CONF="$HOME/.tmux.conf"
+
+if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
+  echo "==> Reloading tmux config"
+  tmux source-file "$TMUX_CONF"
+fi

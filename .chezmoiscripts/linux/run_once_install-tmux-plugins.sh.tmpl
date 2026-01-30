@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+
+echo "==> Installing tmux plugins"
+
+# 1. Install TPM
+if [[ ! -d "$TPM_DIR" ]]; then
+  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+else
+  echo "==> TPM already installed"
+fi
+
+# 2. Install plugins via TPM (non-interactive)
+if command -v tmux >/dev/null 2>&1; then
+  if ! tmux has-session 2>/dev/null; then
+    echo "==> Installing tmux plugins"
+    tmux start-server
+    tmux new-session -d
+    "$TPM_DIR/bin/install_plugins"
+    tmux kill-server
+  else
+    echo "==> tmux already running, install manually with: Ctrl-a I"
+  fi
+else
+  echo "==> tmux not installed, skipping plugin install"
+fi
