@@ -23,7 +23,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-INSTALLED_VERSION="$(k9s version -s 2>/dev/null | awk '{print $2}')"
+INSTALLED_VERSION="$(k9s version -s | awk '/^Version/ {print $2}')"
 
 if [[ "$INSTALLED_VERSION" == "$K9S_VERSION" ]]; then
   echo "==> k9s ${K9S_VERSION} already installed"

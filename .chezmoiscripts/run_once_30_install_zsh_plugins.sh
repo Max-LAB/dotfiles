@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.config/oh-my-zsh/custom}"
 
 plugins=(
   zsh-autosuggestions

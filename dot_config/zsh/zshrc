@@ -1,0 +1,15 @@
+export ZSH="$HOME/.config/oh-my-zsh"
+
+ZSH_THEME="agnoster" #robbyrussell
+
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+source "$ZSH/oh-my-zsh.sh"
+
+for file in $HOME/.config/zsh/modules/*.zsh(N); do
+  source "$file"
+done
