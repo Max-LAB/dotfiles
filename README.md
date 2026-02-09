@@ -31,3 +31,7 @@ chezmoi status
 ```sh
 hezmoi init --apply Max-LAB´
 ```
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Max-LAB/dotfiles/main/install.sh | sh
+```
