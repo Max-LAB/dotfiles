@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{- if eq .chezmoi.os "linux" }}
+
+echo "==> Running Google Chrome installer on Linux"
+
+# Path variables
+KEYRING=/usr/share/keyrings/google-chrome.gpg
+REPO_FILE=/etc/apt/sources.list.d/google-chrome.list
+
+# Add Google Chrome signing key if missing
+if [[ ! -f "$KEYRING" ]]; then
+  sudo mkdir -p "$(dirname "$KEYRING")"
+  curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+    | sudo gpg --dearmor -o "$KEYRING"
+fi
+
+# Add repository if missing
+if [[ ! -f "$REPO_FILE" ]]; then
+  echo "deb [arch=amd64 signed-by=$KEYRING] http://dl.google.com/linux/chrome/deb/ stable main" \
+    | sudo tee "$REPO_FILE" > /dev/null
+fi
+
+echo "==> Updating package lists"
+sudo apt update -qq
+
+# Install or update Google Chrome
+if ! dpkg -l google-chrome-stable >/dev/null 2>&1; then
+  echo "==> Installing Google Chrome"
+  sudo apt install -y google-chrome-stable
+else
+  echo "==> Google Chrome is installed — checking for updates"
+  sudo apt install -y --only-upgrade google-chrome-stable
+fi
+
+{{- else }}
+echo "==> Skipping Google Chrome installer — not Linux"
+{{- end }}
