@@ -10,6 +10,7 @@
             "gnupg",
             "gpg",
             "jq",
+            "lazygit",
             "nano",
             "tmux",
             "unzip",
